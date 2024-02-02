@@ -1,0 +1,120 @@
+@use "variables" as *;
+
+.terminal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 726px;
+  margin: 200px auto;
+  overflow: hidden;
+  background: $black;
+  color: $white;
+  border-radius: 10px;
+
+  &__inner {
+    height: 100%;
+    padding: 20px;
+  }
+
+  &__output {
+    overflow: auto;
+    height: 282px;
+  }
+
+  &__inputWrapper {
+    position: relative;
+  }
+
+  &__input {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    outline: none;
+    background: $gray;
+    color: $white;
+    border-radius: 5px;
+  }
+
+  &__suggestions {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    visibility: hidden;
+    opacity: 0;
+    background-color: $gray;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    transition: opacity 0.3s, visibility 0.3s;
+
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      left: 24px;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid $gray;
+    }
+
+    &--visible {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &__header {
+    padding: 5px 10px;
+    background-color: $gray;
+    position: relative;
+  }
+
+  &__title {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    
+  }
+
+  &__dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  &__dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+
+    &--red {
+      background-color: $red;
+    }
+
+    &--yellow {
+      background-color: $yellow;
+    }
+
+    &--green {
+      background-color: $green;
+    }
+  }
+
+  &__message {
+    font-size: 12px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+
+    &--error {
+      color: $red;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/style.scss" />
+    <title>Terminal</title>
+  </head>
+  <body>
+    <div class="terminal" id="terminal">
+      <div class="terminal__header">
+        <div class="terminal__dots">
+          <div class="terminal__dot terminal__dot--red"></div>
+          <div class="terminal__dot terminal__dot--yellow"></div>
+          <div class="terminal__dot terminal__dot--green"></div>
+        </div>
+        <p class="terminal__title">webjaksklep</p>
+      </div>
+      <div class="terminal__inner">
+        <div class="terminal__output" id="output">
+          <div class="terminal__message">
+            Last login: <span id="lastLoginTime"></span>
+          </div>
+        </div>
+        <div class="terminal__inputWrapper">
+          <input
+            class="terminal__input"
+            type="text"
+            id="input"
+            placeholder="Enter command..."
+          />
+          <div class="terminal__suggestions" id="suggestions"></div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/assets/js/main.js"></script>
+  </body>
+</html>
