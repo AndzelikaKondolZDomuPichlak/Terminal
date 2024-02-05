@@ -34,6 +34,11 @@
     background: $gray;
     color: $white;
     border-radius: 5px;
+
+    &:disabled {
+      background-color: $white;
+      opacity: 0.3;
+    }
   }
 
   &__suggestions {
@@ -49,7 +54,6 @@
     border-radius: 5px;
     font-size: 12px;
     transition: opacity 0.3s, visibility 0.3s;
-
 
     &::after {
       content: "";
@@ -82,7 +86,6 @@
     top: 50%;
     font-size: 11px;
     font-weight: 700;
-    
   }
 
   &__dots {

@@ -1,6 +1,6 @@
 # Projekt Komponentu Wyszukiwania
 
-Prosty terminal stworzony przy użyciu HTML, CSS i JavaScript.
+Prosty terminal stworzony przy użyciu HTML, SCSS i JavaScript.
 
 ## Stos Technologiczny
 
@@ -22,11 +22,11 @@ Aby skonfigurować projekt lokalnie, wykonaj poniższe kroki:
 
 1. **Sklonuj Repozytorium**
 
-   Zacznij od sklonowania repozytorium projektu na swoją maszynę lokalną. Użyj poniższego polecenia, zastępując `https://twoj-adres-repozytorium.git` rzeczywistym adresem URL repozytorium Twojego projektu:
+   Zacznij od sklonowania repozytorium projektu na swoją maszynę lokalną.
 
    ```
-   git clone https://twoj-adres-repozytorium.git
-   cd projekt-komponentu-wyszukiwania
+   git clone https://github.com/AndzelikaKondolZDomuPichlak/Terminal.git
+   cd Terminal
    ```
 
 2. **Zainstaluj Zależności**

@@ -3,23 +3,36 @@ import { setupCommandInput } from "./components/commandInput";
 import { updateSuggestions } from "./components/commandSuggestions";
 import { CUSTOM_COMMANDS } from "./customCommands";
 
-const output = document.getElementById("output");
-const input = document.getElementById("input");
-const suggestions = document.getElementById("suggestions");
-const lastLoginTimeElement = document.getElementById("lastLoginTime");
+const initializeTerminal = (terminalId) => {
+  const terminalComponent = document.getElementById(terminalId);
+  if (!terminalComponent) {
+    console.error("Terminal initialization failed: Wrapper not found.");
+    return;
+  }
 
-// Odczytanie ostatniego czasu logowania z lokalnej pamięci przeglądarki (localStorage)
-let lastLoginTime = localStorage.getItem("lastLoginTime");
-// Jeśli nie ma zapisanego czasu, ustaw bieżący czas jako ostatni czas logowania
-if (!lastLoginTime) {
-  lastLoginTime = new Date().toISOString();
-  localStorage.setItem("lastLoginTime", lastLoginTime); // Zapisanie w localStorage
-}
-// Wyświetlenie sformatowanego czasu ostatniego logowania
-lastLoginTimeElement.textContent = formatLoginTime(lastLoginTime);
+  const output = terminalComponent.querySelector(".terminal__output");
+  const input = terminalComponent.querySelector(".terminal__input");
+  const suggestions = terminalComponent.querySelector(".terminal__suggestions");
+  const lastLoginTimeElement = terminalComponent.querySelector(
+    ".terminal__message span"
+  );
 
-// Inicjalizacja obsługi wprowadzania poleceń przez użytkownika
-setupCommandInput(input, output, CUSTOM_COMMANDS, suggestions);
+  if (!output || !input || !suggestions || !lastLoginTimeElement) {
+    console.error(
+      "Terminal initialization failed: One or more internal elements not found."
+    );
+    return;
+  }
 
-// Inicjalizacja obsługi wyświetlania sugestii poleceń
-updateSuggestions(input, suggestions, CUSTOM_COMMANDS);
+  let lastLoginTime = localStorage.getItem("lastLoginTime");
+  if (!lastLoginTime) {
+    lastLoginTime = new Date().toISOString();
+    localStorage.setItem("lastLoginTime", lastLoginTime);
+  }
+  lastLoginTimeElement.textContent = formatLoginTime(lastLoginTime);
+
+  setupCommandInput(input, output, CUSTOM_COMMANDS, suggestions);
+  updateSuggestions(input, suggestions, CUSTOM_COMMANDS);
+};
+
+initializeTerminal("terminal");

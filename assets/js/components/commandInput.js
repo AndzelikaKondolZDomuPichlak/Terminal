@@ -1,9 +1,5 @@
 import { executeCommand } from "../components/commandOutput.js";
-import {
-  addCommandToHistory,
-  getPreviousCommand,
-  getNextCommand,
-} from "../commandHistory.js";
+import { createCommandHistoryManager } from "../commandHistory.js";
 
 export function setupCommandInput(
   inputElement,
@@ -11,29 +7,41 @@ export function setupCommandInput(
   customCommands,
   suggestionsElement
 ) {
+  const commandHistoryManager = createCommandHistoryManager();
+
+  const handleEnterKey = async () => {
+    await executeCommand(
+      inputElement.value,
+      inputElement,
+      outputElement,
+      customCommands
+    );
+    suggestionsElement.textContent = "";
+    suggestionsElement.classList.remove("terminal__suggestions--visible");
+    commandHistoryManager.addCommandToHistory(inputElement.value);
+    inputElement.value = "";
+  };
+
+  const handleArrowUpKey = () => {
+    inputElement.value = commandHistoryManager.getPreviousCommand();
+  };
+
+  const handleArrowDownKey = () => {
+    inputElement.value = commandHistoryManager.getNextCommand();
+  };
+
   inputElement.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      executeCommand(inputElement.value, outputElement, customCommands);
-
-      // Czyszczenie sugestii i ukrycie elementu po wykonaniu komendy
-      suggestionsElement.textContent = "";
-      suggestionsElement.classList.remove("terminal__suggestions--visible");
-
-      // Dodanie wprowadzonej komendy do historii komend
-      addCommandToHistory(inputElement.value);
-
-      // Wyczyszczenie pola input, aby przygotować miejsce na nową komendę
-      inputElement.value = "";
-    } else if (e.key === "ArrowUp") {
-      // Jeśli naciśnięto strzałkę w górę, przejdź do poprzedniej komendy w historii
-      const previousCommand = getPreviousCommand();
-      if (previousCommand !== null) {
-        inputElement.value = previousCommand;
-        e.preventDefault(); // Zapobiegaj domyślnemu zachowaniu, aby kursor nie przemieszczał się na początek pola
-      }
-    } else if (e.key === "ArrowDown") {
-      // Jeśli naciśnięto strzałkę w dół, przejdź do następnej komendy w historii
-      inputElement.value = getNextCommand();
+    switch (e.key) {
+      case "Enter":
+        handleEnterKey();
+        break;
+      case "ArrowUp":
+        handleArrowUpKey();
+        e.preventDefault();
+        break;
+      case "ArrowDown":
+        handleArrowDownKey();
+        break;
     }
   });
 }

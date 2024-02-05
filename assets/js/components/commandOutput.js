@@ -1,31 +1,46 @@
-import { fetchQuote } from "../helpers/fetchQuote.js";
+import { fetchQuote } from "../helpers/fetchQuote";
 
-function appendResponse(outputElement, text, isError = false) {
+const appendResponse = (outputElement, text, isError = false) => {
   const elem = document.createElement("div");
   elem.textContent = text;
   elem.classList.add("terminal__message");
   if (isError) {
-    // Oznaczanie wiadomości jako błąd, aby wyróżnić ją kolorem lub stylem
     elem.classList.add("terminal__message--error");
   }
   outputElement.appendChild(elem);
-}
+  outputElement.scrollTop = outputElement.scrollHeight;
+};
 
-export function executeCommand(command, outputElement, customCommands) {
-  // Bezpośrednie wyświetlenie wprowadzonej komendy na ekranie terminala
+export const executeCommand = async (
+  command,
+  inputElement,
+  outputElement,
+  customCommands
+) => {
   appendResponse(outputElement, `you: ${command}`);
 
   if (command === "clear") {
-    // Wyczyszczenie zawartości terminala, jeśli komendą jest "clear"
     outputElement.innerHTML = "";
-    return; // Zakończenie funkcji, by nie wykonywać dalszych operacji
+    return;
   }
 
-  // Sprawdzanie pierwszego słowa komendy, by zdecydować, jaką akcję wykonać
+  const onSuccess = (data) => {
+    appendResponse(outputElement, `terminal: ${data.quote}`);
+    inputElement.disabled = false;
+  };
+
+  const onError = (error) => {
+    appendResponse(
+      outputElement,
+      `terminal: Nie udało się pobrać cytatu. Błąd: ${error.message}`,
+      true
+    );
+    inputElement.disabled = false;
+  };
+
   switch (command.split(" ")[0]) {
     case "help":
-      // Wyświetlenie listy dostępnych komend
-      appendResponse(outputElement, "terminal: Your available options are:");
+      appendResponse(outputElement, "terminal: Dostępne opcje:");
       [
         ...Object.keys(customCommands),
         "clear",
@@ -35,31 +50,29 @@ export function executeCommand(command, outputElement, customCommands) {
       ].forEach((cmd) => appendResponse(outputElement, cmd));
       break;
     case "quote":
-      // Wywołanie funkcji fetchQuote, by pobrać i wyświetlić losowy cytat
-      fetchQuote(outputElement);
+      inputElement.disabled = true;
+      fetchQuote(onSuccess, onError);
       break;
     case "double":
-      // Próba podwojenia liczby podanej w komendzie
       const number = parseInt(command.split(" ")[1], 10);
       if (!isNaN(number)) {
         appendResponse(outputElement, `terminal: ${number * 2}`);
       } else {
         appendResponse(
           outputElement,
-          "terminal: Error: 'double' command expects a number.",
+          "terminal: Błąd: Komenda 'double' oczekuje liczby.",
           true
         );
       }
       break;
     default:
-      // Sprawdzenie, czy komenda nie istnieje wśród zdefiniowanych komend
       const isCommandNotFound = !customCommands[command.split(" ")[0]];
-      const responseText = isCommandNotFound
-        ? `terminal: Command not found: ${command}`
-        : `terminal: ${customCommands[command.split(" ")[0]].msg}`;
-      appendResponse(outputElement, responseText, isCommandNotFound);
+      appendResponse(
+        outputElement,
+        isCommandNotFound
+          ? `terminal: Nie znaleziono komendy: ${command}`
+          : `terminal: ${customCommands[command.split(" ")[0]].msg}`,
+        isCommandNotFound
+      );
   }
-
-  // Przewijanie terminala, by najnowsza wiadomość była widoczna
-  outputElement.scrollTop = outputElement.scrollHeight;
-}
+};
