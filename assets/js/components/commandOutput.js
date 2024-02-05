@@ -24,9 +24,14 @@ export const executeCommand = async (
     return;
   }
 
+  const handleCommonTasks = (inputElement) => {
+    inputElement.disabled = false;
+    inputElement.focus();
+  };
+
   const onSuccess = (data) => {
     appendResponse(outputElement, `terminal: ${data.quote}`);
-    inputElement.disabled = false;
+    handleCommonTasks(inputElement);
   };
 
   const onError = (error) => {
@@ -35,7 +40,7 @@ export const executeCommand = async (
       `terminal: Nie udało się pobrać cytatu. Błąd: ${error.message}`,
       true
     );
-    inputElement.disabled = false;
+    handleCommonTasks(inputElement);
   };
 
   switch (command.split(" ")[0]) {
