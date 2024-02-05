@@ -1,4 +1,4 @@
-# Projekt Komponentu Wyszukiwania
+# Projekt Komponentu Terminala
 
 Prosty terminal stworzony przy użyciu HTML, SCSS i JavaScript.
 
